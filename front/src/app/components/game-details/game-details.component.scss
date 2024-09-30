@@ -1,9 +1,13 @@
 .game-details-top {
     display: flex;
+    background-color: #FFCBAF;
+    padding: 30px 20px;
+    border-radius: 20px;
 
     img {
         height: 400px;
         margin: 0px 20px;
+        border-radius: 10px;
     }
 }
 
