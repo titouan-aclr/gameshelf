@@ -1,0 +1,1 @@
+export type GameCategory = 'Card Game' | 'Economic' | 'Negociation' | 'Dice' | 'Party Game';

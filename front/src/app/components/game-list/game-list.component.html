@@ -1,0 +1,5 @@
+<div class="game-list">
+  @for (game of games; track game.id) {
+  <app-game-list-item [game]="game" />
+  }
+</div>
