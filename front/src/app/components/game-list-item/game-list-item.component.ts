@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { Router } from '@angular/router';
 import { Game } from '../../models/game.model';
 
 @Component({
@@ -10,4 +11,10 @@ import { Game } from '../../models/game.model';
 })
 export class GameListItemComponent {
   @Input() game!: Game;
+
+  constructor(private router: Router) { }
+
+  onViewGame() {
+    this.router.navigateByUrl(`mes-jeux/${this.game.id}`);
+  }
 }

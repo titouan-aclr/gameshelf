@@ -1,4 +1,4 @@
-<div class="game-list-item-card">
+<div class="game-list-item-card" (click)="onViewGame()">
   <img [src]="game.imageUrl" [alt]="game.name" />
   <h3>{{ game.name }}</h3>
   <div class="game-list-item-infos">

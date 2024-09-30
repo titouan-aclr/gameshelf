@@ -1,0 +1,41 @@
+.game-details-top {
+    display: flex;
+
+    img {
+        height: 400px;
+        margin: 0px 20px;
+    }
+}
+
+.game-list-item-infos {
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
+    align-items: center;
+
+    img {
+        width: 20px;
+        height: 20px;
+        margin: 0px 5px 0px 0px;
+    }
+
+    div {
+        display: flex;
+        align-items: center;
+    }
+}
+
+.game-list-item-category {
+    margin: 10px 0px;
+    display: flex;
+    flex-wrap: wrap;
+
+    div {
+        background-color: grey;
+        color: white;
+        border-radius: 5px;
+        padding: 5px 10px;
+        margin: 3px;
+        white-space: nowrap;
+    }
+}

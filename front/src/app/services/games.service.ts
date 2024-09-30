@@ -53,7 +53,7 @@ export class GamesService {
         new Game(
             39856,
             'Dixit',
-            "",
+            "Each turn in Dixit, one player is the storyteller, chooses one of the six cards in their hand, then makes up a sentence based on that card's image and says it out loud without showing the card to the other players. Each other player then selects the card in their hand that best matches the sentence and gives the selected card to the storyteller, without showing it to anyone else.&amp;#10;&amp;#10;The storyteller shuffles their card with all of the received cards, then reveals all of these cards. Each player other than the storyteller then secretly guesses which card belongs to the storyteller. If nobody or everybody guesses the correct card, the storyteller scores 0 points, and each other player scores 2 points. Otherwise, the storyteller and whoever found the correct answer score 3 points. Additionally, the non-storyteller players score 1 point for every vote received by their card.&amp;#10;&amp;#10;The game ends when the deck is empty or if a player has scored at least 30 points. In either case, the player with the most points wins.&amp;#10;&amp;#10;The Dixit base game and each expansion contains 84 cards, and the cards can be mixed together as desired.&amp;#10;&amp;#10;",
             'https://cf.geekdo-images.com/J0PlHArkZDJ57H-brXW2Fw__original/img/jt3kFCHJ3HJ2079dMLwipFZqdQg=/0x0/filters:format(jpeg)/pic6738336.jpg',
             2008,
             3,
@@ -68,7 +68,7 @@ export class GamesService {
     }
 
     getGameById(gameId: number): Game {
-        const foundGame = this.games.find((game) => game.id === gameId);
+        const foundGame = this.games.find((game) => game.id == gameId);
         if (!foundGame) {
             throw new Error(`Game with id ${gameId} not found`);
         }
