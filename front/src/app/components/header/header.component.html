@@ -1,8 +1,13 @@
 <header>
   <h1>GameShelf</h1>
   <nav>
-    <a>Accueil</a>
-    <a>Mes jeux</a>
+    <a
+      routerLink=""
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+      >Accueil
+    </a>
+    <a routerLink="mes-jeux" routerLinkActive="active">Mes jeux</a>
     <a>Mes emplacements</a>
   </nav>
 </header>
