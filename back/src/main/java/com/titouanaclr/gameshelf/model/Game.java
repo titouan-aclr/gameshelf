@@ -17,6 +17,9 @@ public class Game {
     @Column(nullable = false)
     private String name;
 
+    @Column
+    private String description;
+
     @Column(name = "image_url")
     private String imageUrl;
 
@@ -29,8 +32,8 @@ public class Game {
     @Column(name = "max_players")
     private int maxPlayers;
 
-    @Column
-    private String description;
+    @Column(name = "playing_time")
+    private int playingTime;
 
     @Column(name = "year_published")
     private int yearPublished;
