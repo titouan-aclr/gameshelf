@@ -20,6 +20,7 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final CustomUserDetailService customUserDetailService;
+    private final UnauthorizedHandler unauthorizedHandler;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -30,6 +31,7 @@ public class SecurityConfig {
             .cors(cors -> cors.disable()) // TODO : get informed about it
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .formLogin(formLogin -> formLogin.disable())
+            .exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint(unauthorizedHandler))
             .securityMatcher("/**")
             .authorizeHttpRequests(registry -> registry
                     .requestMatchers("/").permitAll()
