@@ -33,7 +33,7 @@ public class User {
     @Column(name = "created_at")
     private Date createdAt;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),
