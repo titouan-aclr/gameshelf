@@ -22,6 +22,7 @@ public class AuthController {
     @ResponseStatus(HttpStatus.ACCEPTED)
     public ResponseEntity<?> registerAndLogin(@RequestBody @Valid RegisterRequest request) {
         this.authService.register(request);
+        // TODO : add email validation
         return ResponseEntity.accepted().build();
     }
 
