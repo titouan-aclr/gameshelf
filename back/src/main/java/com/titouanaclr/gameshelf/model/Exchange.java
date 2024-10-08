@@ -3,12 +3,14 @@ package com.titouanaclr.gameshelf.model;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.Date;
 
 @Data
 @Entity
 @Table(name = "exchange")
+@EntityListeners(AuditingEntityListener.class)
 public class Exchange {
 
     @Id

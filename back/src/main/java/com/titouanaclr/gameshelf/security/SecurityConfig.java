@@ -7,6 +7,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -28,14 +29,14 @@ public class SecurityConfig {
 
         http
             .csrf(csrf -> csrf.disable()) // TODO : get informed about it
-            .cors(cors -> cors.disable()) // TODO : get informed about it
+            .cors(AbstractHttpConfigurer::disable) // TODO : get informed about it
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .formLogin(formLogin -> formLogin.disable())
             .exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint(unauthorizedHandler))
             .securityMatcher("/**")
             .authorizeHttpRequests(registry -> registry
                     .requestMatchers("/").permitAll()
-                    .requestMatchers("/auth/login").permitAll()
+                    .requestMatchers("/auth/**").permitAll()
                     .requestMatchers("/admin/**").hasRole("ADMIN")
                     .anyRequest().authenticated()
             );

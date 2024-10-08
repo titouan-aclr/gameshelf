@@ -1,10 +1,6 @@
 package com.titouanaclr.gameshelf.security;
 
-import com.titouanaclr.gameshelf.model.User;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
-
-import java.util.Collection;
 
 public class UserPrincipalAuthenticationToken extends AbstractAuthenticationToken {
 

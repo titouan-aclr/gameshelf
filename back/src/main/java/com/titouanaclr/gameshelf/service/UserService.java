@@ -16,4 +16,8 @@ public class UserService {
     public Optional<User> findByEmail(String email) {
         return this.userRepository.findByEmail(email);
     }
+
+    public User save(User user) {
+        return this.userRepository.save(user);
+    }
 }

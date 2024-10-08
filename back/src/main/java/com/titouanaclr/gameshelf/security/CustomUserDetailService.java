@@ -24,7 +24,7 @@ public class CustomUserDetailService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         // Our UserDetails' username is actually our user's email in the database
-        User user = this.userService.findByEmail(username).orElseThrow();
+        User user = this.userService.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         Set<Role> roles = user.getRoles();
         List<GrantedAuthority> authorities = roles.stream()

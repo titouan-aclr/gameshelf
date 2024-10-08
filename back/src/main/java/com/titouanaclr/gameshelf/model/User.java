@@ -2,8 +2,10 @@ package com.titouanaclr.gameshelf.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -11,8 +13,10 @@ import java.util.List;
 import java.util.Set;
 
 @Data
+@Builder
 @Entity
 @Table(name = "app_user")
+@EntityListeners(AuditingEntityListener.class)
 public class User {
 
     @Id
@@ -24,7 +28,7 @@ public class User {
 
     @Column(nullable = false, unique = true)
     private String email;
-
+ 
     @JsonIgnore
     @Column(nullable = false)
     private String password;
