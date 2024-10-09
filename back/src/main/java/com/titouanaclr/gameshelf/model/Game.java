@@ -21,7 +21,7 @@ public class Game {
     @Column(nullable = false)
     private String name;
 
-    @Lob
+//    @Lob
     @Column(length = 5000)
     private String description;
 
