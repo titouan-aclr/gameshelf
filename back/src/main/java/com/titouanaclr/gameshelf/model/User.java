@@ -2,8 +2,10 @@ package com.titouanaclr.gameshelf.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -15,6 +17,8 @@ import java.util.Set;
 @Data
 @Builder
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "app_user")
 @EntityListeners(AuditingEntityListener.class)
 public class User {
@@ -34,7 +38,7 @@ public class User {
     private String password;
 
     @CreatedDate
-    @Column(name = "created_at")
+    @Column(name = "created_at", nullable = false, updatable = false)
     private Date createdAt;
 
     @ManyToMany(fetch = FetchType.EAGER)

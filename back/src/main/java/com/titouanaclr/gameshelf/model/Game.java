@@ -1,11 +1,15 @@
 package com.titouanaclr.gameshelf.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.util.List;
 
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "game")
 public class Game {
@@ -17,7 +21,8 @@ public class Game {
     @Column(nullable = false)
     private String name;
 
-    @Column
+    @Lob
+    @Column(length = 5000)
     private String description;
 
     @Column(name = "image_url")
@@ -38,7 +43,7 @@ public class Game {
     @Column(name = "year_published")
     private int yearPublished;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "game_category",
             joinColumns = @JoinColumn(name = "game_id"),
@@ -47,6 +52,7 @@ public class Game {
     private List<Category> categories;
 
     @OneToMany(mappedBy = "game")
+    @JsonIgnore
     private List<UserGame> userGames;
 
 }

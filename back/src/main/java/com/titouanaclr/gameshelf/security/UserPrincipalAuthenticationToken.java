@@ -8,7 +8,6 @@ public class UserPrincipalAuthenticationToken extends AbstractAuthenticationToke
 
     public UserPrincipalAuthenticationToken(UserPrincipal principal) {
         super(principal.getAuthorities());
-        System.out.println("UserPrincipalAuthenticationToken::constructor");
         this.principal = principal;
         setAuthenticated(true);
     }

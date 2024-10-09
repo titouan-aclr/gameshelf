@@ -30,7 +30,7 @@ public class Exchange {
     private Game game;
 
     @CreatedDate
-    @Column(name = "start_date")
+    @Column(name = "start_date", nullable = false, updatable = false)
     private Date startDate;
 
     @Column(name = "end_date")

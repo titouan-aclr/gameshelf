@@ -29,7 +29,7 @@ public class Location {
     private User user;
 
     @CreatedDate
-    @Column(name = "created_at")
+    @Column(name = "created_at", nullable = false, updatable = false)
     private Date createdAt;
 
     @OneToMany(mappedBy = "location")

@@ -30,7 +30,7 @@ public class UserGame {
     private Location location;
 
     @CreatedDate
-    @Column(name = "registered_date")
+    @Column(name = "registered_date", nullable = false, updatable = false)
     private Date registeredDate;
 
 }
