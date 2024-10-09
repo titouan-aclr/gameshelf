@@ -3,7 +3,11 @@ package com.titouanaclr.gameshelf.service;
 import com.titouanaclr.gameshelf.model.User;
 import com.titouanaclr.gameshelf.model.UserProfileResponse;
 import com.titouanaclr.gameshelf.repository.UserRepository;
+import com.titouanaclr.gameshelf.security.UserPrincipal;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Hibernate;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -28,5 +32,17 @@ public class UserService {
         User user = this.userRepository.findById(userId)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with ID :" + userId));
         return this.userMapper.toUserProfileResponse(user);
+    }
+
+    @Transactional
+    public User findCurrentUser(Authentication currentUser) {
+        UserPrincipal userPrincipal = ((UserPrincipal) currentUser.getPrincipal());
+        User user = this.userRepository.findById(userPrincipal.getUserId())
+                .orElseThrow(() -> new UsernameNotFoundException("Error with connected user"));
+
+        // TODO : find a solution to avoid fetching games
+        Hibernate.initialize(user.getLocations());
+        Hibernate.initialize(user.getGames());
+        return user;
     }
 }
