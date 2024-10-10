@@ -59,6 +59,5 @@ public class LocationService {
         }
 
         this.locationRepository.delete(location);
-
     }
 }

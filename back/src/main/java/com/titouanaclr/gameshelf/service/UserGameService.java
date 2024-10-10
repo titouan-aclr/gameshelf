@@ -1,11 +1,13 @@
 package com.titouanaclr.gameshelf.service;
 
+import com.titouanaclr.gameshelf.exception.UnauthorizedActionException;
 import com.titouanaclr.gameshelf.model.PageResponse;
 import com.titouanaclr.gameshelf.model.User;
 import com.titouanaclr.gameshelf.model.UserGame;
 import com.titouanaclr.gameshelf.model.UserGameRequest;
 import com.titouanaclr.gameshelf.repository.UserGameRepository;
 import com.titouanaclr.gameshelf.security.UserPrincipal;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Hibernate;
@@ -55,5 +57,18 @@ public class UserGameService {
 
         UserGame userGame = userGameMapper.toUserGame(request);
         return this.userGameRepository.save(userGame).getId();
+    }
+
+    public void deleteUserGame(Integer userGameId, Authentication currentUser) {
+        UserPrincipal userPrincipal = ((UserPrincipal) currentUser.getPrincipal());
+
+        UserGame userGame = this.userGameRepository.findById(userGameId)
+                .orElseThrow(() -> new EntityNotFoundException("UserGame not found with ID " + userGameId));
+
+        if(!userGame.getUser().getId().equals(userPrincipal.getUserId())){
+            throw new UnauthorizedActionException("UserGame with ID " + userGameId + " does not belong to current user");
+        }
+
+        this.userGameRepository.delete(userGame);
     }
 }
