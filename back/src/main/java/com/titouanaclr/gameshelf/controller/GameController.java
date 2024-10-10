@@ -10,18 +10,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("games")
 @RequiredArgsConstructor
 public class GameController {
 
     private final GameService gameService;
 
-    @PostMapping
+    @PostMapping("admin/games")
     public ResponseEntity<Integer> saveBook(@RequestBody @Valid GameRequest request) {
         return ResponseEntity.ok(this.gameService.save(request));
     }
 
-    @GetMapping
+    @GetMapping("games")
     public ResponseEntity<PageResponse<Game>> findAllGames(
             @RequestParam(name = "page", defaultValue = "0", required = false) int page,
             @RequestParam(name = "size", defaultValue = "9", required = false) int size
@@ -29,7 +28,7 @@ public class GameController {
         return ResponseEntity.ok(this.gameService.findAllGames(page, size));
     }
 
-    @GetMapping("{game-id}")
+    @GetMapping("games/{game-id}")
     public ResponseEntity<Game> findBookById(@PathVariable("game-id") Integer gameId) {
         return ResponseEntity.ok(this.gameService.findById(gameId));
     }
