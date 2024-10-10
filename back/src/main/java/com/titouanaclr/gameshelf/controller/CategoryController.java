@@ -23,4 +23,17 @@ public class CategoryController {
     public ResponseEntity<Integer> saveCategory(@RequestBody @Valid CategoryRequest request) {
         return ResponseEntity.ok(this.categoryService.save(request));
     }
+
+    @PutMapping("admin/categories/{id}")
+    public ResponseEntity<Category> updateCategory(
+            @PathVariable Integer id,
+            @RequestBody @Valid CategoryRequest request
+    ) {
+
+        if (!id.equals(request.id())) {
+            throw new IllegalArgumentException("ID from URL must be the same as ID from body");
+        }
+
+        return ResponseEntity.ok(this.categoryService.update(request));
+    }
 }

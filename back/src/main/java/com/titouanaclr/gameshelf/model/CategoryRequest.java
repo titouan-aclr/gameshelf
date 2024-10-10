@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public record CategoryRequest(
-        int id,
+        Integer id,
         @NotNull(message = "200")
         @NotEmpty(message = "200")
         String name,
