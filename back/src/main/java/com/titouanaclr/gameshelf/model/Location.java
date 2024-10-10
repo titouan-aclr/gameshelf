@@ -44,4 +44,11 @@ public class Location {
     @JsonIgnore
     private List<UserGame> games;
 
+    @PreRemove
+    private void preRemove() {
+        for (UserGame game : games) {
+            game.setLocation(null);
+        }
+    }
+
 }

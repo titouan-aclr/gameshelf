@@ -10,17 +10,18 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("users/current/locations")
 @RequiredArgsConstructor
 public class LocationController {
 
     private final LocationService locationService;
 
-    @GetMapping("users/current/locations")
+    @GetMapping
     public ResponseEntity<Iterable<Location>> findAllCurrentUserLocations(Authentication currentUser) {
         return ResponseEntity.ok(this.locationService.findAllCurrentUserLocations(currentUser));
     }
 
-    @PostMapping("users/current/locations")
+    @PostMapping
     public ResponseEntity<Integer> addLocation(
             @RequestBody @Valid LocationRequest request,
             Authentication currentUser
@@ -28,7 +29,7 @@ public class LocationController {
         return ResponseEntity.ok(this.locationService.saveCurrentUserLocation(request, currentUser));
     }
 
-    @PutMapping("users/current/locations/{location-id}")
+    @PutMapping("{location-id}")
     public ResponseEntity<Location> updateLocation(
             @PathVariable("location-id") Integer locationId,
             @RequestBody @Valid LocationRequest request,
@@ -43,5 +44,14 @@ public class LocationController {
         }
 
         return ResponseEntity.ok(this.locationService.update(request, currentUser));
+    }
+
+    @DeleteMapping("{location-id}")
+    public ResponseEntity<Void> deleteLocation(
+            @PathVariable("location-id") Integer locationId,
+            Authentication currentUser
+    ) {
+        this.locationService.delete(locationId, currentUser);
+        return ResponseEntity.noContent().build();
     }
 }

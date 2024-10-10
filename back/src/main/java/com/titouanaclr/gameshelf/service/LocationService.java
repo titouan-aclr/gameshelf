@@ -1,6 +1,6 @@
 package com.titouanaclr.gameshelf.service;
 
-import com.titouanaclr.gameshelf.exception.OperationNotPermittedException;
+import com.titouanaclr.gameshelf.exception.UnauthorizedActionException;
 import com.titouanaclr.gameshelf.model.Location;
 import com.titouanaclr.gameshelf.model.LocationRequest;
 import com.titouanaclr.gameshelf.model.User;
@@ -40,11 +40,25 @@ public class LocationService {
 
         UserPrincipal userPrincipal = ((UserPrincipal) currentUser.getPrincipal());
         if(userPrincipal.getUserId() != location.getUser().getId()) {
-            throw new OperationNotPermittedException("Location with ID " + request.id() + " does not belong to current user");
+            throw new UnauthorizedActionException("Location with ID " + request.id() + " does not belong to current user");
         }
 
         location.setName(request.name());
         location.setDescription(request.description());
         return this.locationRepository.save(location);
+    }
+
+    public void delete(Integer locationId, Authentication currentUser) {
+        UserPrincipal userPrincipal = ((UserPrincipal) currentUser.getPrincipal());
+
+        Location location = this.locationRepository.findById(locationId)
+                .orElseThrow(() -> new EntityNotFoundException("Location not found with ID " + locationId));
+
+        if (!location.getUser().getId().equals(userPrincipal.getUserId())) {
+            throw new UnauthorizedActionException("Location with ID " + locationId + " does not belong to current user");
+        }
+
+        this.locationRepository.delete(location);
+
     }
 }

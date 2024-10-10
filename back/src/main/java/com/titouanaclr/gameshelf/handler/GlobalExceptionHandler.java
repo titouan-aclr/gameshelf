@@ -1,6 +1,7 @@
 package com.titouanaclr.gameshelf.handler;
 
 import com.titouanaclr.gameshelf.exception.OperationNotPermittedException;
+import com.titouanaclr.gameshelf.exception.UnauthorizedActionException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
@@ -79,6 +80,17 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ExceptionResponse> handleException(OperationNotPermittedException exception) {
         return ResponseEntity
                 .status(BAD_REQUEST)
+                .body(
+                        ExceptionResponse.builder()
+                                .error(exception.getMessage())
+                                .build()
+                );
+    }
+
+    @ExceptionHandler(UnauthorizedActionException.class)
+    public ResponseEntity<ExceptionResponse> handleException(UnauthorizedActionException exception) {
+        return ResponseEntity
+                .status(FORBIDDEN)
                 .body(
                         ExceptionResponse.builder()
                                 .error(exception.getMessage())
