@@ -1,10 +1,12 @@
 package com.titouanaclr.gameshelf.service;
 
 import com.titouanaclr.gameshelf.model.PageResponse;
+import com.titouanaclr.gameshelf.model.User;
 import com.titouanaclr.gameshelf.model.UserGame;
+import com.titouanaclr.gameshelf.model.UserGameRequest;
 import com.titouanaclr.gameshelf.repository.UserGameRepository;
 import com.titouanaclr.gameshelf.security.UserPrincipal;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -15,10 +17,12 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class UserGameService {
 
-    @Autowired
-    private UserGameRepository userGameRepository;
+    private final UserGameRepository userGameRepository;
+    private final UserGameMapper userGameMapper;
+    private final UserService userService;
 
     public PageResponse<UserGame> findCurrentUserGames(int page, int size, Authentication currentUser) {
         UserPrincipal userPrincipal = ((UserPrincipal) currentUser.getPrincipal());
@@ -36,5 +40,16 @@ public class UserGameService {
                 userGames.isFirst(),
                 userGames.isLast()
         );
+    }
+
+    public Integer saveCurrentUserGame(UserGameRequest request, Authentication currentUser) {
+        UserPrincipal userPrincipal = ((UserPrincipal) currentUser.getPrincipal());
+        if(request.user() == null) {
+            User user = this.userService.findById(userPrincipal.getUserId());
+            request = request.withUser(user);
+        }
+
+        UserGame userGame = userGameMapper.toUserGame(request);
+        return this.userGameRepository.save(userGame).getId();
     }
 }

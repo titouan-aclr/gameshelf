@@ -2,7 +2,10 @@ package com.titouanaclr.gameshelf.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -10,6 +13,9 @@ import java.util.Date;
 
 @Data
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "user_game")
 @EntityListeners(AuditingEntityListener.class)
 public class UserGame {
@@ -27,7 +33,7 @@ public class UserGame {
     @JoinColumn(name = "game_id", nullable = false)
     private Game game;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "location_id", nullable = true)
     private Location location;
 

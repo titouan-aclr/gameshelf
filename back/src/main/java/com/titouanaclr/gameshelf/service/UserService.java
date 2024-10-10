@@ -45,4 +45,9 @@ public class UserService {
         Hibernate.initialize(user.getGames());
         return user;
     }
+
+    public User findById(int userId) {
+        return this.userRepository.findById(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with ID :" + userId));
+    }
 }

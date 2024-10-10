@@ -2,13 +2,13 @@ package com.titouanaclr.gameshelf.controller;
 
 import com.titouanaclr.gameshelf.model.PageResponse;
 import com.titouanaclr.gameshelf.model.UserGame;
+import com.titouanaclr.gameshelf.model.UserGameRequest;
 import com.titouanaclr.gameshelf.service.UserGameService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,5 +23,13 @@ public class UserGameController {
             Authentication currentUser
     ) {
         return ResponseEntity.ok(this.userGameService.findCurrentUserGames(page, size, currentUser));
+    }
+
+    @PostMapping("users/current/games")
+    public ResponseEntity<Integer> addUserGame(
+            @RequestBody @Valid UserGameRequest request,
+            Authentication currentUser
+    ){
+        return ResponseEntity.ok(this.userGameService.saveCurrentUserGame(request, currentUser));
     }
 }
