@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface LocationRepository extends CrudRepository<Location, Integer> {
+
+    public Iterable<Location> findByUserId(int userId);
 }
