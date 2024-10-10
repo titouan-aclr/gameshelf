@@ -15,7 +15,7 @@ public class Exchange {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(name = "lender_id", nullable = false)

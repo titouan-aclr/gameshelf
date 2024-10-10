@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 public record LocationRequest(
-        int id,
+        Integer id,
         @NotNull(message = "400")
         @NotEmpty(message = "400")
         String name,

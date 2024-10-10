@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import java.util.List;
 
 public record GameRequest(
-        int id,
+        Integer id,
         @NotNull(message = "100")
         @NotEmpty(message = "100")
         String name,

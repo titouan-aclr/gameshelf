@@ -12,7 +12,7 @@ import java.util.Set;
 @Builder
 public class UserProfileResponse {
 
-    private int id;
+    private Integer id;
     private String username;
     private Date createdAt;
     private Set<Role> roles;
