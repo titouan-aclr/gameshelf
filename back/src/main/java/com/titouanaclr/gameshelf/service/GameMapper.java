@@ -1,14 +1,19 @@
 package com.titouanaclr.gameshelf.service;
 
 import com.titouanaclr.gameshelf.model.Game;
-import com.titouanaclr.gameshelf.model.GameRequest;
+import com.titouanaclr.gameshelf.model.GameCreateRequest;
+import com.titouanaclr.gameshelf.model.GameResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+@RequiredArgsConstructor
 @Service
 public class GameMapper {
-    public Game toGame(GameRequest request) {
+
+    private final CategoryMapper categoryMapper;
+
+    public Game toGame(GameCreateRequest request) {
         return Game.builder()
-                .id(request.id())
                 .name(request.name())
                 .description(request.description())
                 .minPlayers(request.minPlayers())
@@ -18,6 +23,21 @@ public class GameMapper {
                 .imageUrl(request.imageUrl())
                 .thumbnailUrl(request.thumbnailUrl())
                 .categories(request.categories())
+                .build();
+    }
+
+    public GameResponse toGameResponse(Game game) {
+        return GameResponse.builder()
+                .id(game.getId())
+                .name(game.getName())
+                .description(game.getDescription())
+                .imageUrl(game.getImageUrl())
+                .thumbnailUrl(game.getThumbnailUrl())
+                .minPlayers(game.getMinPlayers())
+                .maxPlayers(game.getMaxPlayers())
+                .playingTime(game.getPlayingTime())
+                .yearPublished(game.getYearPublished())
+                .categories(game.getCategories().stream().map(categoryMapper::toCategoryResponse).toList())
                 .build();
     }
 }
