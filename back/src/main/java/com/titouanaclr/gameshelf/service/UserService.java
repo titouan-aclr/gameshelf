@@ -1,6 +1,7 @@
 package com.titouanaclr.gameshelf.service;
 
 import com.titouanaclr.gameshelf.model.User;
+import com.titouanaclr.gameshelf.model.UserAccountResponse;
 import com.titouanaclr.gameshelf.model.UserProfileResponse;
 import com.titouanaclr.gameshelf.repository.UserRepository;
 import com.titouanaclr.gameshelf.security.UserPrincipal;
@@ -35,7 +36,7 @@ public class UserService {
     }
 
     @Transactional
-    public User findCurrentUser(Authentication currentUser) {
+    public UserAccountResponse findCurrentUser(Authentication currentUser) {
         UserPrincipal userPrincipal = ((UserPrincipal) currentUser.getPrincipal());
         User user = this.userRepository.findById(userPrincipal.getUserId())
                 .orElseThrow(() -> new UsernameNotFoundException("Error with connected user"));
@@ -43,7 +44,7 @@ public class UserService {
         // TODO : find a solution to avoid fetching games
         Hibernate.initialize(user.getLocations());
         Hibernate.initialize(user.getGames());
-        return user;
+        return userMapper.toUserAccountResponse(user);
     }
 
     public User findById(int userId) {
