@@ -1,9 +1,11 @@
 package com.titouanaclr.gameshelf.controller;
 
-import com.titouanaclr.gameshelf.model.Category;
-import com.titouanaclr.gameshelf.model.CategoryRequest;
+import com.titouanaclr.gameshelf.model.CategoryCreateRequest;
+import com.titouanaclr.gameshelf.model.CategoryUpdateRequest;
+import com.titouanaclr.gameshelf.model.CategoryResponse;
 import com.titouanaclr.gameshelf.service.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -25,12 +27,12 @@ public class CategoryController {
 
     @Operation(summary = "Get all categories", description = "Retrieve a list of all game categories.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully retrieved list of categories", content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved list of categories", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = CategoryResponse.class)))),
             @ApiResponse(responseCode = "401", description = "Unauthorized - Invalid token", content = @Content),
             @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
     })
     @GetMapping("categories")
-    public ResponseEntity<Iterable<Category>> findAll() {
+    public ResponseEntity<Iterable<CategoryResponse>> findAll() {
         return ResponseEntity.ok(this.categoryService.findAll());
     }
 
@@ -42,22 +44,22 @@ public class CategoryController {
             @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
     })
     @PostMapping("admin/categories")
-    public ResponseEntity<Integer> saveCategory(@RequestBody @Valid CategoryRequest request) {
-        return ResponseEntity.ok(this.categoryService.save(request));
+    public ResponseEntity<Integer> saveCategory(@RequestBody @Valid CategoryCreateRequest request) {
+        return ResponseEntity.ok(this.categoryService.create(request));
     }
 
     @Operation(summary = "Update an existing category",description = "Update an existing game category by its ID. Only accessible by admin users.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Category successfully updated", content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "200", description = "Category successfully updated", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CategoryResponse.class))),
             @ApiResponse(responseCode = "400", description = "Invalid input data or ID mismatch", content = @Content),
             @ApiResponse(responseCode = "401", description = "Unauthorized - Invalid token", content = @Content),
             @ApiResponse(responseCode = "404", description = "Category not found", content = @Content),
             @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
     })
     @PutMapping("admin/categories/{id}")
-    public ResponseEntity<Category> updateCategory(
+    public ResponseEntity<CategoryResponse> updateCategory(
             @PathVariable Integer id,
-            @RequestBody @Valid CategoryRequest request
+            @RequestBody @Valid CategoryUpdateRequest request
     ) {
 
         if (!id.equals(request.id())) {
