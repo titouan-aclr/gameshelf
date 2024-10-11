@@ -4,13 +4,17 @@ import com.titouanaclr.gameshelf.model.Game;
 import com.titouanaclr.gameshelf.model.GameRequest;
 import com.titouanaclr.gameshelf.model.PageResponse;
 import com.titouanaclr.gameshelf.service.GameService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
+@Tag(name = "Games", description = "Manage all games available for the application")
+@SecurityRequirement(name = "bearerAuth")
 @RequiredArgsConstructor
+@RestController
 public class GameController {
 
     private final GameService gameService;

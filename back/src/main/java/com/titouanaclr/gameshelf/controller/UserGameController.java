@@ -4,15 +4,19 @@ import com.titouanaclr.gameshelf.model.PageResponse;
 import com.titouanaclr.gameshelf.model.UserGame;
 import com.titouanaclr.gameshelf.model.UserGameRequest;
 import com.titouanaclr.gameshelf.service.UserGameService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "User's Games", description = "Manage user's game inventory")
+@SecurityRequirement(name = "bearerAuth")
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("users/current/games")
-@RequiredArgsConstructor
 public class UserGameController {
 
     private final UserGameService userGameService;
