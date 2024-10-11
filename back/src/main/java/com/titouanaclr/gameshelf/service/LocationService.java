@@ -1,15 +1,16 @@
 package com.titouanaclr.gameshelf.service;
 
 import com.titouanaclr.gameshelf.exception.UnauthorizedActionException;
-import com.titouanaclr.gameshelf.model.Location;
-import com.titouanaclr.gameshelf.model.LocationRequest;
-import com.titouanaclr.gameshelf.model.User;
+import com.titouanaclr.gameshelf.model.*;
 import com.titouanaclr.gameshelf.repository.LocationRepository;
 import com.titouanaclr.gameshelf.security.UserPrincipal;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 @RequiredArgsConstructor
@@ -19,22 +20,23 @@ public class LocationService {
     private final UserService userService;
     private final LocationMapper locationMapper;
 
-    public Iterable<Location> findAllCurrentUserLocations(Authentication currentUser) {
+    public Iterable<LocationResponse> findAllCurrentUserLocations(Authentication currentUser) {
         UserPrincipal userPrincipal = ((UserPrincipal) currentUser.getPrincipal());
-        return this.locationRepository.findByUserId(userPrincipal.getUserId());
+        Iterable<Location> locations = this.locationRepository.findByUserId(userPrincipal.getUserId());
+        return StreamSupport.stream(locations.spliterator(), false)
+                .map(locationMapper::toLocationResponse) // Utilisation du mapper
+                .collect(Collectors.toList());
     }
 
-    public Integer saveCurrentUserLocation(LocationRequest request, Authentication currentUser) {
+    public Integer saveCurrentUserLocation(LocationCreateRequest request, Authentication currentUser) {
         UserPrincipal userPrincipal = ((UserPrincipal) currentUser.getPrincipal());
-        if(request.user() == null) {
-            User user = this.userService.findById(userPrincipal.getUserId());
-            request = request.withUser(user);
-        }
-        Location location = locationMapper.toLocation(request);
+        User user = this.userService.findById(userPrincipal.getUserId());
+        // TODO : verify that location with same name does not exists for user
+        Location location = locationMapper.toLocation(request, user);
         return this.locationRepository.save(location).getId();
     }
 
-    public Location update(LocationRequest request, Authentication currentUser) {
+    public LocationResponse update(LocationUpdateRequest request, Authentication currentUser) {
         Location location = this.locationRepository.findById(request.id())
                 .orElseThrow(() -> new EntityNotFoundException("Location not found with ID " + request.id()));
 
@@ -45,7 +47,7 @@ public class LocationService {
 
         location.setName(request.name());
         location.setDescription(request.description());
-        return this.locationRepository.save(location);
+        return locationMapper.toLocationResponse(this.locationRepository.save(location));
     }
 
     public void delete(Integer locationId, Authentication currentUser) {

@@ -1,18 +1,25 @@
 package com.titouanaclr.gameshelf.service;
 
-import com.titouanaclr.gameshelf.model.Location;
-import com.titouanaclr.gameshelf.model.LocationRequest;
+import com.titouanaclr.gameshelf.model.*;
 import org.springframework.stereotype.Service;
 
 @Service
 public class LocationMapper {
 
-    public Location toLocation(LocationRequest request) {
+    public Location toLocation(LocationCreateRequest request, User user) {
         return Location.builder()
-                .id(request.id())
                 .name(request.name())
                 .description(request.description())
-                .user(request.user())
+                .user(user)
+                .build();
+    }
+
+    public LocationResponse toLocationResponse(Location location) {
+        return LocationResponse.builder()
+                .id(location.getId())
+                .name(location.getName())
+                .description(location.getDescription())
+                .createdAt(location.getCreatedAt())
                 .build();
     }
 }
