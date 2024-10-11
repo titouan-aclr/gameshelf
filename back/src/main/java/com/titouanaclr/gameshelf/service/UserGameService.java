@@ -1,10 +1,7 @@
 package com.titouanaclr.gameshelf.service;
 
 import com.titouanaclr.gameshelf.exception.UnauthorizedActionException;
-import com.titouanaclr.gameshelf.model.PageResponse;
-import com.titouanaclr.gameshelf.model.User;
-import com.titouanaclr.gameshelf.model.UserGame;
-import com.titouanaclr.gameshelf.model.UserGameRequest;
+import com.titouanaclr.gameshelf.model.*;
 import com.titouanaclr.gameshelf.repository.UserGameRepository;
 import com.titouanaclr.gameshelf.security.UserPrincipal;
 import jakarta.persistence.EntityNotFoundException;
@@ -29,15 +26,17 @@ public class UserGameService {
     private final UserService userService;
 
     @Transactional
-    public PageResponse<UserGame> findCurrentUserGames(int page, int size, Authentication currentUser) {
+    public PageResponse<UserGameResponse> findCurrentUserGames(int page, int size, Authentication currentUser) {
         UserPrincipal userPrincipal = ((UserPrincipal) currentUser.getPrincipal());
 
         Pageable pageable = PageRequest.of(page, size, Sort.by("registeredDate").descending());
         Page<UserGame> userGames = this.userGameRepository.findByUserId(pageable, userPrincipal.getUserId());
         userGames.forEach(userGame -> Hibernate.initialize(userGame.getLocation()));
-        List<UserGame> userGamesResponse = userGames.stream().toList();
+        List<UserGameResponse> userGamesResponse = userGames.stream()
+                .map(userGameMapper::toUserGameResponse)
+                .toList();
 
-        return new PageResponse<UserGame>(
+        return new PageResponse<UserGameResponse>(
                 userGamesResponse,
                 userGames.getNumber(),
                 userGames.getSize(),
@@ -48,14 +47,10 @@ public class UserGameService {
         );
     }
 
-    public Integer saveCurrentUserGame(UserGameRequest request, Authentication currentUser) {
+    public Integer saveCurrentUserGame(UserGameCreateRequest request, Authentication currentUser) {
         UserPrincipal userPrincipal = ((UserPrincipal) currentUser.getPrincipal());
-        if(request.user() == null) {
-            User user = this.userService.findById(userPrincipal.getUserId());
-            request = request.withUser(user);
-        }
-
-        UserGame userGame = userGameMapper.toUserGame(request);
+        User user = this.userService.findById(userPrincipal.getUserId());
+        UserGame userGame = userGameMapper.toUserGame(request, user);
         return this.userGameRepository.save(userGame).getId();
     }
 
