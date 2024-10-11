@@ -1,8 +1,8 @@
 package com.titouanaclr.gameshelf.security;
 
-import com.titouanaclr.gameshelf.model.Role;
-import com.titouanaclr.gameshelf.model.User;
-import com.titouanaclr.gameshelf.service.UserService;
+import com.titouanaclr.gameshelf.role.Role;
+import com.titouanaclr.gameshelf.user.User;
+import com.titouanaclr.gameshelf.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
