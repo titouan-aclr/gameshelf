@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,7 +31,7 @@ public class GameController {
     })
     @PostMapping("admin/games")
     public ResponseEntity<Integer> saveBook(@RequestBody @Valid GameCreateRequest request) {
-        return ResponseEntity.ok(this.gameService.save(request));
+        return ResponseEntity.status(HttpStatus.CREATED).body(this.gameService.save(request));
     }
 
     @Operation(summary = "Get all games", description = "Retrieve a paginated list of all games available in the database.")

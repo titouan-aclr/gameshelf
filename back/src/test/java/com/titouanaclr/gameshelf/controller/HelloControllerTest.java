@@ -54,7 +54,7 @@ class HelloControllerTest {
     }
 
     @Test
-    @WithAdminUser
+    @WithMockAdmin
     void admin_shouldSeeAdminEndpoint() throws Exception {
         api.perform(get("/admin"))
                 .andExpect(status().isOk())
