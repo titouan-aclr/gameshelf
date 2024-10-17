@@ -1,6 +1,6 @@
 package com.titouanaclr.gameshelf.user;
 
-import com.titouanaclr.gameshelf.controller.WithMockUser;
+import com.titouanaclr.gameshelf.common.WithMockUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

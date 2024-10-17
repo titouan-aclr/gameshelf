@@ -49,6 +49,7 @@ public class UserGameService {
     }
 
     public Integer saveCurrentUserGame(UserGameCreateRequest request, Authentication currentUser) {
+        // TODO : verify that location belongs to user + write test for it
         UserPrincipal userPrincipal = ((UserPrincipal) currentUser.getPrincipal());
         User user = this.userService.findById(userPrincipal.getUserId());
         UserGame userGame = userGameMapper.toUserGame(request, user);

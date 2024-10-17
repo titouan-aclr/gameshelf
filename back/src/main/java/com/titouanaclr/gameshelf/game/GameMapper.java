@@ -4,6 +4,8 @@ import com.titouanaclr.gameshelf.category.CategoryMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+
 @RequiredArgsConstructor
 @Service
 public class GameMapper {
@@ -35,7 +37,11 @@ public class GameMapper {
                 .maxPlayers(game.getMaxPlayers())
                 .playingTime(game.getPlayingTime())
                 .yearPublished(game.getYearPublished())
-                .categories(game.getCategories().stream().map(categoryMapper::toCategoryResponse).toList())
+                .categories(
+                        game.getCategories() != null
+                                ? game.getCategories().stream().map(categoryMapper::toCategoryResponse).toList()
+                                : Collections.emptyList()
+                )
                 .build();
     }
 }

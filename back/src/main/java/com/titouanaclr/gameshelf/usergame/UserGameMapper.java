@@ -25,7 +25,7 @@ public class UserGameMapper {
         return UserGameResponse.builder()
                 .id(userGame.getId())
                 .game(this.gameMapper.toGameResponse(userGame.getGame()))
-                .location(this.locationMapper.toLocationResponse(userGame.getLocation()))
+                .location(userGame.getLocation() != null ? this.locationMapper.toLocationResponse(userGame.getLocation()) : null)
                 .registeredDate(userGame.getRegisteredDate())
                 .build();
     }

@@ -1,4 +1,4 @@
-package com.titouanaclr.gameshelf.controller;
+package com.titouanaclr.gameshelf.common;
 
 import com.titouanaclr.gameshelf.security.UserPrincipal;
 import com.titouanaclr.gameshelf.security.UserPrincipalAuthenticationToken;
@@ -7,7 +7,6 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithSecurityContextFactory;
 
-import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.List;
 

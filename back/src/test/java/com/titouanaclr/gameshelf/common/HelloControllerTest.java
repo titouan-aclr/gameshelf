@@ -1,4 +1,4 @@
-package com.titouanaclr.gameshelf.controller;
+package com.titouanaclr.gameshelf.common;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

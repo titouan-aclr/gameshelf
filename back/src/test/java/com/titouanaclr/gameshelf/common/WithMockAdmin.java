@@ -1,4 +1,4 @@
-package com.titouanaclr.gameshelf.controller;
+package com.titouanaclr.gameshelf.common;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

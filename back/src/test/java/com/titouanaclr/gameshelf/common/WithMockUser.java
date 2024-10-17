@@ -1,4 +1,4 @@
-package com.titouanaclr.gameshelf.controller;
+package com.titouanaclr.gameshelf.common;
 
 import org.springframework.security.test.context.support.WithSecurityContext;
 
