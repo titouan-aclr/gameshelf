@@ -1,5 +1,6 @@
 package com.titouanaclr.gameshelf.category;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.titouanaclr.gameshelf.common.WithMockAdmin;
 import com.titouanaclr.gameshelf.common.WithMockUser;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,6 +23,9 @@ class CategoryControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Autowired
     private CategoryRepository categoryRepository;
@@ -56,16 +60,11 @@ class CategoryControllerTest {
     @Test
     @WithMockAdmin
     void testSaveCategory_Success() throws Exception {
-        String newCategoryJson = """
-            {
-                "name": "Strategy",
-                "description": "Games that require planning"
-            }
-        """;
+        CategoryCreateRequest request = new CategoryCreateRequest("Strategy", "Games that require planning");
 
         mockMvc.perform(post("/admin/categories")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(newCategoryJson))
+                        .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$", is(1)));
@@ -80,64 +79,44 @@ class CategoryControllerTest {
     @Test
     @WithMockAdmin
     void testSaveCategory_InvalidInput() throws Exception {
-        String invalidCategoryJson = """
-            {
-                "name": "",
-                "description": "Description missing name"
-            }
-        """;
+        CategoryCreateRequest request = new CategoryCreateRequest("", "Description missing name");
 
         mockMvc.perform(post("/admin/categories")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(invalidCategoryJson))
+                        .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest());
     }
 
-    @Test
-    void testSaveCategory_Unauthorized() throws Exception {
-        String newCategoryJson = """
-            {
-                "name": "Adventure",
-                "description": "Games about adventure"
-            }
-        """;
-
-        mockMvc.perform(post("/admin/categories")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(newCategoryJson))
-                .andExpect(status().isUnauthorized());
-    }
 
     @Test
     @WithMockUser
     void testSaveCategory_Forbidden() throws Exception {
-        String newCategoryJson = """
-            {
-                "name": "Adventure",
-                "description": "Games about adventure"
-            }
-        """;
+        CategoryCreateRequest request = new CategoryCreateRequest("Strategy", "Games that require planning");
 
         mockMvc.perform(post("/admin/categories")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(newCategoryJson))
+                        .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isForbidden());
     }
+    @Test
+    void testSaveCategory_Unauthorized() throws Exception {
+        CategoryCreateRequest request = new CategoryCreateRequest("Strategy", "Games that require planning");
 
+        mockMvc.perform(post("/admin/categories")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isUnauthorized());
+    }
+
+    // PUT /admin/categories/{category-id}
     @Test
     @WithMockAdmin
     void testUpdateCategory_Success() throws Exception {
-        String updateCategoryJson = """
-            {
-                "id": 102,
-                "name": "Negotiation",
-                "description": "Updated description"
-            }
-        """;
+        CategoryUpdateRequest request = new CategoryUpdateRequest(102, "Negotiation", "Updated description");
 
         mockMvc.perform(put("/admin/categories/{id}", 102)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(updateCategoryJson))
+                        .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", is("Negotiation")))
                 .andExpect(jsonPath("$.description", is("Updated description")));
@@ -152,35 +131,54 @@ class CategoryControllerTest {
     @Test
     @WithMockAdmin
     void testUpdateCategory_NotFound() throws Exception {
-        String updateCategoryJson = """
-            {
-                "id": 9999,
-                "name": "Unknown Category",
-                "description": "This category does not exist"
-            }
-        """;
+        CategoryUpdateRequest request = new CategoryUpdateRequest(9999, "Unknown Category", "This category does not exist");
 
         mockMvc.perform(put("/admin/categories/{id}", 9999)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(updateCategoryJson))
+                        .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     @WithMockAdmin
-    void testUpdateCategory_InvalidIdMismatch() throws Exception {
-        String updateCategoryJson = """
-            {
-                "id": 102,
-                "name": "Invalid Category",
-                "description": "Mismatched ID"
-            }
-        """;
+    void testUpdateCategory_InvalidInput() throws Exception {
+        CategoryUpdateRequest request = new CategoryUpdateRequest(102, "Invalid Category", "");
 
-        mockMvc.perform(put("/admin/categories/{id}", 103)
+        mockMvc.perform(put("/admin/categories/{id}", 102)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(updateCategoryJson))
+                        .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest());
     }
 
+    @Test
+    @WithMockAdmin
+    void testUpdateCategory_InvalidIdMismatch() throws Exception {
+        CategoryUpdateRequest request = new CategoryUpdateRequest(102, "Invalid Category", "Mismatched ID");
+
+        mockMvc.perform(put("/admin/categories/{id}", 103)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @WithMockUser
+    void testUpdateCategory_Forbidden() throws Exception {
+        CategoryUpdateRequest request = new CategoryUpdateRequest(102, "Strategy", "Games that require planning");
+
+        mockMvc.perform(post("/admin/categories")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void testUpdateCategory_Unauthorized() throws Exception {
+        CategoryUpdateRequest request = new CategoryUpdateRequest(102, "Strategy", "Games that require planning");
+
+        mockMvc.perform(post("/admin/categories")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isUnauthorized());
+    }
 }
