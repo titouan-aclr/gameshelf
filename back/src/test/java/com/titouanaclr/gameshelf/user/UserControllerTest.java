@@ -37,6 +37,7 @@ class UserControllerTest {
         userRepository.save(user);
     }
 
+    // GET /users/{user-id} (Profile)
     @Test
     @WithMockUser
     void testFindUserProfileById_Success() throws Exception {
@@ -61,6 +62,7 @@ class UserControllerTest {
                 .andExpect(status().isUnauthorized());
     }
 
+    // GET /users/current
     @Test
     @WithMockUser
     void testFindCurrentUser_Success() throws Exception {

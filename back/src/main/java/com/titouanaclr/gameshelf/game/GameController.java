@@ -22,18 +22,6 @@ public class GameController {
 
     private final GameService gameService;
 
-    @Operation(summary = "Create a new game", description = "Save a new game to the application. Only accessible by admin users.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Successfully created game", content = @Content(mediaType = "application/json", schema = @Schema(type = "integer", example = "32"))),
-            @ApiResponse(responseCode = "400", description = "Bad request - Invalid game data", content = @Content),
-            @ApiResponse(responseCode = "401", description = "Unauthorized - Invalid token", content = @Content),
-            @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
-    })
-    @PostMapping("admin/games")
-    public ResponseEntity<Integer> saveBook(@RequestBody @Valid GameCreateRequest request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(this.gameService.save(request));
-    }
-
     @Operation(summary = "Get all games", description = "Retrieve a paginated list of all games available in the database.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved list of games", content = @Content(mediaType = "application/json", schema = @Schema(implementation = PageResponse.class))),
@@ -58,5 +46,16 @@ public class GameController {
     @GetMapping("games/{game-id}")
     public ResponseEntity<GameResponse> findBookById(@PathVariable("game-id") Integer gameId) {
         return ResponseEntity.ok(this.gameService.findById(gameId));
+    }
+    @Operation(summary = "Create a new game", description = "Save a new game to the application. Only accessible by admin users.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Successfully created game", content = @Content(mediaType = "application/json", schema = @Schema(type = "integer", example = "32"))),
+            @ApiResponse(responseCode = "400", description = "Bad request - Invalid game data", content = @Content),
+            @ApiResponse(responseCode = "401", description = "Unauthorized - Invalid token", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
+    })
+    @PostMapping("admin/games")
+    public ResponseEntity<Integer> saveBook(@RequestBody @Valid GameCreateRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(this.gameService.save(request));
     }
 }
