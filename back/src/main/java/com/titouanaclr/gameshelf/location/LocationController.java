@@ -1,5 +1,6 @@
 package com.titouanaclr.gameshelf.location;
 
+import com.titouanaclr.gameshelf.exception.OperationNotPermittedException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -9,6 +10,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +37,7 @@ public class LocationController {
 
     @Operation(summary = "Add a new location", description = "Create a new location for the current user.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Location created successfully and ID returned", content = @Content(mediaType = "application/json", schema = @Schema(type = "integer", example = "93"))),
+            @ApiResponse(responseCode = "201", description = "Location created successfully and ID returned", content = @Content(mediaType = "application/json", schema = @Schema(type = "integer", example = "93"))),
             @ApiResponse(responseCode = "400", description = "Bad request - Invalid location data", content = @Content),
             @ApiResponse(responseCode = "401", description = "Unauthorized - Invalid token", content = @Content),
             @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
@@ -45,7 +47,7 @@ public class LocationController {
             @RequestBody @Valid LocationCreateRequest request,
             Authentication currentUser
     ) {
-        return ResponseEntity.ok(this.locationService.saveCurrentUserLocation(request, currentUser));
+        return ResponseEntity.status(HttpStatus.CREATED).body(this.locationService.saveCurrentUserLocation(request, currentUser));
     }
 
     @Operation(summary = "Update an existing location", description = "Update the details of an existing location owned by the current user.")
@@ -67,7 +69,7 @@ public class LocationController {
         }
 
         if (!locationId.equals(request.id())) {
-            throw new IllegalArgumentException("ID from URL must be the same as ID from body");
+            throw new OperationNotPermittedException("ID from URL must be the same as ID from body");
         }
 
         return ResponseEntity.ok(this.locationService.update(request, currentUser));
