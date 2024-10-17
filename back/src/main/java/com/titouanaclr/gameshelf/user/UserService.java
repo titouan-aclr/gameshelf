@@ -1,11 +1,11 @@
 package com.titouanaclr.gameshelf.user;
 
 import com.titouanaclr.gameshelf.security.UserPrincipal;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Hibernate;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -27,7 +27,7 @@ public class UserService {
 
     public UserProfileResponse findUserProfileById(Integer userId) {
         User user = this.userRepository.findById(userId)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with ID :" + userId));
+                .orElseThrow(() -> new EntityNotFoundException("User not found with ID :" + userId));
         return this.userMapper.toUserProfileResponse(user);
     }
 
@@ -35,7 +35,7 @@ public class UserService {
     public UserAccountResponse findCurrentUser(Authentication currentUser) {
         UserPrincipal userPrincipal = ((UserPrincipal) currentUser.getPrincipal());
         User user = this.userRepository.findById(userPrincipal.getUserId())
-                .orElseThrow(() -> new UsernameNotFoundException("Error with connected user"));
+                .orElseThrow(() -> new EntityNotFoundException("Error with connected user"));
 
         // TODO : find a solution to avoid fetching games
         Hibernate.initialize(user.getLocations());
@@ -45,6 +45,6 @@ public class UserService {
 
     public User findById(int userId) {
         return this.userRepository.findById(userId)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with ID :" + userId));
+                .orElseThrow(() -> new EntityNotFoundException("User not found with ID :" + userId));
     }
 }
