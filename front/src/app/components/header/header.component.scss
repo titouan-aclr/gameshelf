@@ -1,0 +1,25 @@
+header {
+    margin-bottom: 20px;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #3F3A60;
+    color: white;
+}
+
+a {
+    margin: 0 10px;
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+
+    &:hover {
+        color: #FFCBAF;
+    }
+}
+
+.active {
+    color: #FF5100;
+    text-decoration: underline;
+}

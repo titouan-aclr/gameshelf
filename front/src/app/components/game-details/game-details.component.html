@@ -1,0 +1,27 @@
+<section class="game-details-top">
+  <img [src]="game.imageUrl" [alt]="game.name" />
+  <div>
+    <h2>{{ game.name }}</h2>
+    <div class="game-list-item-infos">
+      <div>
+        <img src="/assets/icon-groupe.png" alt="Nombre de joueurs" />
+        {{ game.minPlayers }}-{{ game.maxPlayers }}
+      </div>
+      <div>
+        <img src="/assets/icon-horloge.png" alt="Temps de jeu" />
+        {{ game.playingTime }} min
+      </div>
+    </div>
+    <p>Publié : {{ game.yearPublished }}</p>
+    <p>Catégories :</p>
+    <div class="game-list-item-category">
+      @for (category of game.gameCategory; track $index) {
+      <div>{{ category }}</div>
+      }
+    </div>
+  </div>
+</section>
+<section>
+  <h3>Description</h3>
+  <p [innerHTML]="game.description | decodeHtml"></p>
+</section>
